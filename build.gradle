@@ -1,0 +1,44 @@
+plugins {
+    id 'com.gradleup.shadow' version '8.3.0'
+    id 'application'
+    id 'java'
+}
+
+group = "me.kumo"
+version = "0.0.1"
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io/' }
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+    implementation 'com.github.Querz:NBT:6.1'
+    implementation 'com.github.weisj:darklaf-core:3.0.2'
+    implementation 'org.openjdk.nashorn:nashorn-core:15.4'
+    implementation "com.github.weisj:darklaf-extensions-rsyntaxarea:0.1.0"
+    implementation 'com.fifesoft:rsyntaxtextarea:3.5.1'
+    implementation 'org.reflections:reflections:0.10.2'
+
+    implementation 'org.slf4j:slf4j-simple:2.0.16'
+    testImplementation(platform('org.junit:junit-bom:5.10.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+}
+
+application {
+    mainClass = 'me.kumo.mcf.MinecraftForensics'
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['res']
+        }
+    }
+}
+tasks.test {
+    useJUnitPlatform()
+}

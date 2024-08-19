@@ -1,0 +1,37 @@
+name: Auto Release
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'build.gradle.kts'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Get version from build.gradle
+        id: get_version
+        run: |
+          VERSION=$(grep '^version' build.gradle.kts | cut -d '=' -f 2 | tr -d ' "')
+          echo "::set-output name=VERSION::$VERSION"
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew clean build shadowJar
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "./build/libs/*-all.jar"
+          commit: "master"
+          tag: v${{ steps.get_version.outputs.VERSION }}
