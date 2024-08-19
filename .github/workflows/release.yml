@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'build.gradle.kts'
+      - 'build.gradle'
 
 jobs:
   release:
@@ -18,13 +18,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: 17
+          java-version: 21
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Get version from build.gradle
         id: get_version
         run: |
-          VERSION=$(grep '^version' build.gradle.kts | cut -d '=' -f 2 | tr -d ' "')
+          VERSION=$(grep '^version' build.gradle | cut -d '=' -f 2 | tr -d ' "')
           echo "::set-output name=VERSION::$VERSION"
       - name: Make gradlew executable
         run: chmod +x ./gradlew
